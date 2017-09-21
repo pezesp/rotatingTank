@@ -1,4 +1,3 @@
-from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import pyplot as plt
 import numpy as np
 
@@ -8,11 +7,11 @@ def main():
 	R, THETA = np.meshgrid(r, theta)
 	# Express the mesh in the cartesian system.
 	X, Y = R*np.cos(THETA), R*np.sin(THETA)
-	path = 'Vdata/'
+	variable = 'V'
+	path = variable+'data/'
 
 	for m in range(1,30,1):
-		Z = np.fromfile(path+'V'+str('%02d' % m)+'.dat', dtype=float, sep='   ').reshape(23,120)
-		Z = Z.T
+		Z = np.fromfile(path+variable+str('%02d' % m)+'.dat', dtype=float, sep='   ').reshape(120,23)
 		
 		fig = plt.figure(m)
 		ax = fig.add_subplot(111)
@@ -22,16 +21,16 @@ def main():
 
 		ax.set_xlabel(r'$x$')
 		ax.set_ylabel(r'$y$')
-		ax.set_title(r'Componente V, layer Z='+str('%02d' % m))
+		ax.set_title(r'Componente '+variable+', layer Z='+str('%02d' % m))
 
-		plt.savefig( path+'ComponenteV'+str('%02d' % m)+'.png' , bbox_inches = 'tight' ,\
+		plt.savefig( path+'Componente'+variable+str('%02d' % m)+'.png' , bbox_inches = 'tight' ,\
 		  transparent = 0 )
 		plt.close(m)
 
 	from subprocess import Popen
 	#requiere instalacion de ImageMagick para crear GIF
 	program = 'convert' # o bien poner el path que aparece on $ which convert
-	image = [program, '-delay', '18','-loop','3',path+'*.png', 'Vlayers.gif']
+	image = [program, '-delay', '18','-loop','3',path+'*.png', variable+'layers.gif']
 	Popen(image)
 	#plt.show()
 
